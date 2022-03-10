@@ -1,5 +1,5 @@
 <?php
 
-echo 'Początek';
+echo 'Sprawdzenie';
 
 ?>
