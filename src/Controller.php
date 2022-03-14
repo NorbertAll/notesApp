@@ -14,6 +14,8 @@ class Controller
     const DEFAULT_ACTION='list';
 
     public static array $configuration=[];
+
+    private Database $database;
     private array $request;
     private View $view;
 
@@ -28,7 +30,7 @@ class Controller
         if(empty(self::$configuration['db'])){
             throw new ConfigurationException('Configuration error');
         }
-        $db = new Database(self::$configuration['db']);
+        $this->database = new Database(self::$configuration['db']);
         $this->request=$request;
         $this->view=new View();
         
@@ -45,19 +47,27 @@ class Controller
         switch($this->action()){
             case 'create':
                 $page='create';
-                $created= false;
+              //  $created= false;
 
                 $data=$this->getRequestPost();
                 if(!empty($data)) 
                 {
-                    $created=true;
-                    $viewParams=[
-                        'title' =>  $data['title'],
-                        'description' =>  $data['description']
-                    ];
+                   // $created=true;
+                    
+                    //$this->database->createNote($data);inny zapis
+                    $this->database->createNote([
+                      'title'=> $data['title'],
+                      'description'=> $data['description']
+
+                    ]);
+                    header('Location: /notesApp/?before=created');
+                //    $viewParams=[
+                //        'title' =>  $data['title'],
+                //        'description' =>  $data['description']
+                //    ];
                 
                 }
-                $viewParams['created']=$created;
+             //   $viewParams['created']=$created;
         
                 break;
             case 'show':
@@ -68,7 +78,10 @@ class Controller
                 break;
             default:
                 $page ='list';
-                $viewParams['resultList']="wyświetlamy notatki";
+                $data= $this->getRequestGet();
+                $notes=$this->database->getNotes();
+                dump($notes);
+                $viewParams['before']=$data['before'] ??null;
                 break;
         }
         $this->view->render($page, $viewParams);

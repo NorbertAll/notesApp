@@ -7,32 +7,69 @@ require_once("Exception/StorageException.php");
 
 use App\Exception\ConfigurationException;
 use App\Exception\StorageException;
-
+use PDO;
 use Throwable;
 
 class Database
 {
+
+    private PDO $conect;
+
     public function __construct(array $config)
     {
         try{
         
-           $this->validateConfig($config);
+            $this->validateConfig($config);
+            $this->createConnection($config);
+         
+            }catch(\PDOException $e){
+                throw new StorageException('Connection error');
+                exit('e');
+            }
+    }
+    public function getNotes():array
+    {
+        $notes=[];
+        $query="
+        SELECT * FROM notes
+        ";
+    
+        $result=$this->conect->query($query, PDO::FETCH_ASSOC);
+        foreach($result as $row){
+          $notes[]=$row;  
+        }
+        dump($notes);
+        return $notes;
+    }
+    public function createNote(array $data):void
+    {
+        try{
+            dump($data);
+            $title=$this->conect->quote($data['title']);
+            $description=$this->conect->quote($data['description']);
+            $created=$this->conect->quote(date('Y-m-d H:i:s'));
+            $query="INSERT INTO notes(title, description, created) VALUES($title, $description, $created)";
+            $result=$this->conect->exec($query);
 
-            $dsn = "mysql:dbname={$config['database']};host={$config['host']}";
-            $connection=new \PDO(
+        }catch(Throwable $e){
+            throw new StorageException('Nie udało się stworzyć notatki');
+        }
+        echo "Tworzymy";
+    }
+
+    private function createConnection(array $config):void
+    {
+        $dsn = "mysql:dbname={$config['database']};host={$config['host']}";
+            $this->conect=new PDO(
                 $dsn,
                 $config['user'],
                 $config['password'],
+                [
+                    PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION
+                ]
             );
-            
-        }catch(\PDOException $e){
-            throw new StorageException('Connection error');
-            exit('e');
-        }
-
-
-       
     }
+
     private function validateConfig(array $config):void
     {
         if(
