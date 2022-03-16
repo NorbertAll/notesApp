@@ -40,15 +40,13 @@ class Controller
     public function run():void
     {
        
-        
-        $viewParams = [];
+
 
         
         switch($this->action()){
             case 'create':
                 $page='create';
-              //  $created= false;
-
+         
                 $data=$this->getRequestPost();
                 if(!empty($data)) 
                 {
@@ -71,6 +69,7 @@ class Controller
         
                 break;
             case 'show':
+                $page = 'show';
                 $viewParams=[
                     'title' => 'Moja notatka',
                     'description' => 'Opis'
@@ -79,12 +78,17 @@ class Controller
             default:
                 $page ='list';
                 $data= $this->getRequestGet();
-                $notes=$this->database->getNotes();
-                dump($notes);
-                $viewParams['before']=$data['before'] ??null;
+     
+                //dump($notes);
+                $viewParams=[
+                    'notes'=>$this->database->getNotes(),
+                    
+                    'before'=>$data['before'] ??null
+                ];
+             
                 break;
-        }
-        $this->view->render($page, $viewParams);
+            }
+            $this->view->render($page, $viewParams?? []);
     }    
     private function action(): string
     {

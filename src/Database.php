@@ -27,24 +27,41 @@ class Database
                 exit('e');
             }
     }
+    public function getNote():array
+    {
+        try{
+            
+            $query= "SELECT id, title, created FROM notes";
+            
+            $result=$this->conect->query($query);
+            return $result-> fetchAll(PDO::FETCH_ASSOC);
+        }catch(Throwable $e){
+            throw new StorageException("nie udało sie dostać do danych o notatki", 400, $e);
+        }
+      
+    }
     public function getNotes():array
     {
-        $notes=[];
-        $query="
-        SELECT * FROM notes
-        ";
-    
-        $result=$this->conect->query($query, PDO::FETCH_ASSOC);
-        foreach($result as $row){
-          $notes[]=$row;  
+        try{
+            
+            $query= "SELECT id, title, created FROM notes";
+            
+            $result=$this->conect->query($query);
+            return $result-> fetchAll(PDO::FETCH_ASSOC);
+            //foreach($result as $row){
+            //  $notes[]=$row;  
+            //}
+            //dump($notes);
+             
+        }catch(Throwable $e){
+            throw new StorageException("nie udało sie dostać do danych o notatkach", 400, $e);
         }
-        dump($notes);
-        return $notes;
+      
     }
     public function createNote(array $data):void
     {
         try{
-            dump($data);
+            
             $title=$this->conect->quote($data['title']);
             $description=$this->conect->quote($data['description']);
             $created=$this->conect->quote(date('Y-m-d H:i:s'));
