@@ -9,6 +9,7 @@ use App\Exception\ConfigurationException;
 require_once("src/Utils/debug.php");
 require_once("src/Controller.php");
 require_once("src/Exception/AppException.php");
+
 $configuration=require_once("config/config.php");
 $request=[
    'get'=> $_GET,

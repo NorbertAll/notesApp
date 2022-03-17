@@ -1,6 +1,19 @@
 
 <div class="list">
        <section>
+                <div class="message">
+                     <?php if(!empty($params['error'])) :?>
+                           <?php
+                            switch($params['error']){
+                                   case 'noteNotFound':
+                                          echo "Notatka nie została znaleziona";
+                                          break;
+                            }
+                           ?>
+                            
+                           
+                     <?php endif; ?>
+               </div>
                <div class="message">
                      <?php if(!empty($params['before'])) :?>
                            <?php

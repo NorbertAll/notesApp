@@ -6,6 +6,8 @@ namespace App;
 
 use App\Exception\AppException;
 use App\Exception\ConfigurationException;
+use App\Exception\NotFoundException;
+
 require_once("src/Exception/ConfigurationException.php");
 require_once("src/Database.php");
 require_once("src/View.php");
@@ -70,9 +72,21 @@ class Controller
                 break;
             case 'show':
                 $page = 'show';
+                $data= $this->getRequestGet();
+                $noteId=(int)$data['id'];
+                if(!$noteId){
+                    header('Location: ./?error=missingNoteId');
+                    exit;
+                }
+                try{
+                    $note=$this->database->getNote($noteId);
+                }catch(NotFoundException $e){
+                    header('Location: ./?error=noteNotFound');
+                    
+                }
+                
                 $viewParams=[
-                    'title' => 'Moja notatka',
-                    'description' => 'Opis'
+                    'note'=>$note
                 ];
                 break;
             default:
@@ -83,7 +97,8 @@ class Controller
                 $viewParams=[
                     'notes'=>$this->database->getNotes(),
                     
-                    'before'=>$data['before'] ??null
+                    'before'=>$data['before'] ??null,
+                    'error'=>$data['error']??null
                 ];
              
                 break;
