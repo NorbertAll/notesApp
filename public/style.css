@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=latin-ext');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: #333;
+  background-color: rgb(255, 255, 255);
+  margin: 0;
+  text-align: center;
+  
+}
+
+div.glow
+{
+    margin-top: 5%;
+    text-align: center;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    background: lightgrey;
+    display: inline-block;
+    padding: 10px 10px;
+    border:1px solid gray;
+}
+ul,li{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

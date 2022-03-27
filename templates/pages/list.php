@@ -28,7 +28,7 @@
                      <?php endif; ?>
                </div>
                <div class="tbl-header">
-                     <table cellpadding="0" cellspacing="0" border="1">
+                     <table cellpadding="1" cellspacing="1" border="1" align="center">
                        <thead>
                          <tr>
                            <th>Id</th>
@@ -37,10 +37,10 @@
                            <th>Opcje</th>
                          </tr>
                        </thead>
-                     </table>
+                     
               </div>
               <div class="tbl-content">
-                     <table cellpadding="0" cellspacing="0" border="1">
+                     
                         <tbody>
                             <?php foreach ($params['notes'] ?? [] as $note): ?>
                               <tr>
