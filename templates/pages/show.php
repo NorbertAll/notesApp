@@ -1,10 +1,11 @@
 <div>
+    <?php $note=$params['note']??null ?>
     <?php if($params['note']):?>
    <ul>
-        <li>Id:<?php echo htmlentities($params['note']['id']) ?></li>
-       <li>Tytuł:<?php echo htmlentities($params['note']['title']) ?></li>
-       <li>Opis:<?php echo htmlentities($params['note']['description']) ?></li>
-       <li>Data Stworzenia:<?php echo htmlentities($params['note']['created']) ?></li>
+        <li>Id:<?php echo $note['id'] ?></li>
+       <li>Tytuł:<?php echo $note['title'] ?></li>
+       <li>Opis:<?php echo $note['description'] ?></li>
+       <li>Data Stworzenia:<?php echo $note['created'] ?></li>
    </ul> 
    
    <?php else:?>

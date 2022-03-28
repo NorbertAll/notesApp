@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App;
 
 require_once("src/Utils/debug.php");
-require_once("src/Controller.php");
+require_once("src/NoteController.php");
 require_once("src/Request.php");
 require_once("src/Exception/AppException.php");
 
@@ -23,8 +23,8 @@ try{
    //$controller= new Controller($request);
    //$controller->run();
    //usuwanie redundancji kodu 
-   Controller::initConfiguration($configuration);
-   (new Controller($request))->run();
+   AbstractController::initConfiguration($configuration);
+   (new NoteController($request))->run();
 }catch(ConfigurationException $e){
    echo "<h1>Wystąpił błąd w aplikacji</h1>";
    echo 'Proble z konfiguracją';
