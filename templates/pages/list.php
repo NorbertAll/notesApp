@@ -21,6 +21,9 @@
                                    case 'created':
                                           echo "Notatka została utorzona";
                                           break;
+                                  case 'edited':
+                                        echo "Notatka została stworzona";
+                                        break;
                             }
                            ?>
                             

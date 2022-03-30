@@ -82,6 +82,22 @@ class Database
         echo "Tworzymy";
     }
 
+
+    public function editNote(int $id, array $data):void
+    {
+        try{
+            
+            $title=$this->conect->quote($data['title']);
+            $description=$this->conect->quote($data['description']);
+            
+            $query="UPDATE notes SET title=$title, description=$description WHERE id=$id";
+            $this->conect->exec($query);
+
+        }catch(Throwable $e){
+            throw new StorageException('Nie udało się edytować notatki');
+        }
+    }
+
     private function createConnection(array $config):void
     {
         $dsn = "mysql:dbname={$config['database']};host={$config['host']}";

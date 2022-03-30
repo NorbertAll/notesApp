@@ -24,8 +24,8 @@ class NoteController extends AbstractController
                 'description'=>$this->request->postParam('description')
             ];
             $this->database->createNote($noteData);
+            $this-> redirect('/', ['before'=> 'created']);
            
-            header('Location: /notesApp/?before=created');
         //    $viewParams=[
         //        'title' =>  $data['title'],
         //        'description' =>  $data['description']
@@ -35,6 +35,7 @@ class NoteController extends AbstractController
             //   $viewParams['created']=$created;
         $this->view->render('create');
     }
+
     public function showAction()
     {
         
@@ -43,18 +44,18 @@ class NoteController extends AbstractController
         $noteId=(int)$this->request->getParam('id');
     
         if(!$noteId){
-            header('Location: ./?error=missingNoteId');
-            exit;
+            $this-> redirect('/', ['error'=> 'missingNoteId']);
+
         }
         try{
             $note=$this->database->getNote($noteId);
         }catch(NotFoundException $e){
-            header('Location: ./?error=noteNotFound');
-            
+            $this-> redirect('/', ['error'=> 'noteNotFound']); 
         }
         
         $this->view->render('show',['note'=>$note]);
     }
+
     public function listAction()
     {
                
@@ -65,6 +66,38 @@ class NoteController extends AbstractController
         'error'=>$this->request->getParam('error')
     ]);
     }    
+    public function editAction()
+    {
+
+        if($this->request->isPost()){
+           $noteId=(int)$this->request->postParam('id');
+
+           $noteData=[
+            'title'=>$this->request->postParam('title'),
+            'description'=>$this->request->postParam('description')
+        ];
+            $this->database->editNote($noteId, $noteData);
+            $this-> redirect('/notesApp/', ['before'=> 'edited']);
+
+        }
+         $noteId=(int)$this->request->getParam('id');
+            if(!$noteId){
+                $this-> redirect('/notesApp/', ['error'=> 'missingNoteId']);
+             
+            } 
+       
+
+        try{
+            $note=$this->database->getNote($noteId);
+        }catch(NotFoundException $e){
+            $this-> redirect('/notesApp/', ['error'=> 'noteNotFound']); 
+        }
+
+        $this->view->render(
+            'edit',
+            ['note'=>$note]
+    );
+    }
 
 
 }
