@@ -37,7 +37,7 @@
     
     
 
-    public function run():void
+    final public function run():void
     {
         $action=$this->action()."Action";
         
@@ -61,7 +61,7 @@
        //     }
             
     }  
-    protected function redirect(string $to, array $params):void
+    final protected function redirect(string $to, array $params):void
     {
         $location=$to;
         if(count($params)){

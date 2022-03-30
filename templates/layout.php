@@ -18,12 +18,12 @@
 
             <div class="container">
                 <div class="menu">
-                  <button>
-                            <a href="/notesApp/">Lista Notatek</a>
-                       </button>
-                       <button>
-                            <a href="/notesApp/?action=create">Nowa Notatka</a>
-                            </button>
+                  
+                            <a href="/notesApp/"><button>Lista Notatek</button></a>
+                       
+                       
+                            <a href="/notesApp/?action=create">
+                            <button>Nowa Notatka</button></a>
                 </div>
 <br>
                 <div>
