@@ -1,10 +1,10 @@
 <?php
     declare(strict_types=1);
 
-    namespace App;
-    require_once("Exception/ConfigurationException.php");
-    require_once("Database.php");
-    require_once("View.php");
+    namespace App\Controller;
+
+    use App\Database;
+    use App\View;
     use App\Request;
     use App\Exception\AppException;
     use App\Exception\ConfigurationException;
