@@ -33,6 +33,33 @@
                            
                      <?php endif; ?>
                </div>
+
+              <?php
+
+                  $sort=$params['sort'] ??[];
+                  $by=$sort['by']??'title';
+                  $order=$sort['order']??'desc';
+
+
+
+              ?>
+              <div>
+                <form class="settings-form" action="/notesApp/" method="GET">
+                  <div>Sortuj po:
+                    <label>Tytule: <input name="sortby" type="radio" value="title" <?php echo $by==='title'?'checked' :''  ?>/></label>
+                    <label>Dacie: <input name="sortby" type="radio" value="created" <?php echo $by==='created'?'checked' :''  ?>/></label>
+                  </div>
+
+                  <div>Kierunek sortowania
+                    <label>Rosnąco <input name="sortorder" type="radio" value="asc" <?php echo $order==='asc'?'checked' :''  ?>/></label>
+                    <label>malejąco: <input name="sortorder" type="radio" value="desc" <?php echo $order==='desc'?'checked' :''  ?>/></label>
+                  </div>
+                  <input type="submit" value="Wyślij">
+                </form>
+              </div>
+
+
+
                <div class="tbl-header">
                      <table cellpadding="1" cellspacing="1" border="1" align="center">
                        <thead>
@@ -59,11 +86,13 @@
                                       Szczegóły
                                     </button>
                                   </a>
+
                                   <a href="./?action=delete&id=<?php echo $note['id'] ?>">
                                     <button>
                                       Usuń
                                     </button>
                                   </a>
+
                                 </td>
                               </tr>
                             <?php endforeach; ?>
