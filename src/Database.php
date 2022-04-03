@@ -48,6 +48,32 @@ class Database
 
       
     }
+    public function getCount():int
+    {
+        try{
+
+
+                
+            $query= "SELECT count(*) AS il FROM notes";
+            
+            $result=$this->conect->query($query);
+            $result= $result-> fetch(PDO::FETCH_ASSOC);
+            if(!$result){
+                throw new StorageException("Błąd pobierania ilości notatek", 400);
+            }
+            return (int) $result['il'];
+            
+            //foreach($result as $row){
+            //  $notes[]=$row;  
+            //}
+            //dump($notes);
+             
+        }catch(Throwable $e){
+            throw new StorageException("nie udało się pobrać iformacji o liczbie o notatkach", 400, $e);
+        }
+      
+    }
+
     public function getNotes(int $pageNumber, int $pageSize, string $sortBy, string $sortOrder):array
     {
         try{
@@ -80,6 +106,10 @@ class Database
         }
       
     }
+
+
+
+
     public function createNote(array $data):void
     {
         try{

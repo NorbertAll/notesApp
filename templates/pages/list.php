@@ -42,7 +42,8 @@
 
                   $page=$params['page'] ??[];
                   $size=$page['size'] ??10;
-                  $number=$page['number'] ??1;
+                  $currentPage=$page['number'] ??1;
+                  $pages=$page['pages']??1;
 
 
 
@@ -110,6 +111,28 @@
                         </tbody>
                              
                       </table>
+              </div>
+              <?php 
+              $paginationUrl="&pagesize=$size?&sortby=$by&sortorder=$order"
+              ?>
+              <div class="pagination">
+                <?php if($currentPage!==1):?>
+                <a href="/notesApp/?page=<?php echo $currentPage -1 . $paginationUrl ?>">
+                        <button>Prev</button>
+                </a>
+                <?php endif;?>
+                <?php for($i=1; $i<=$pages; $i++): ?>
+                  
+                    <a href="/notesApp/?page=<?php echo $i. $paginationUrl ?>">
+                      <button><?php echo $i; ?></button>
+                    </a>
+                    &nbsp
+                <?php endfor; ?>
+                <?php if($currentPage<$pages):?>
+                <a href="/notesApp/?page=<?php echo $currentPage +1 . $paginationUrl ?>">
+                      <button>Next</button>
+                </a>
+                <?php endif;?>
               </div>
        </section>
 </div>
