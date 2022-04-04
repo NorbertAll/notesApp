@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
-use App\Exception\NotFoundException;
 
 
 class NoteController extends AbstractController
@@ -17,7 +16,7 @@ class NoteController extends AbstractController
         
         if($this->request->hasPost()) 
         {
-           // $created=true;
+           
             
             $noteData=[
                 'title'=>$this->request->postParam('title'),
@@ -26,21 +25,17 @@ class NoteController extends AbstractController
             $this->database->createNote($noteData);
             $this-> redirect('/notesApp/', ['before'=> 'created']);
            
-        //    $viewParams=[
-        //        'title' =>  $data['title'],
-        //        'description' =>  $data['description']
-        //    ];
+      
         
         }
-            //   $viewParams['created']=$created;
+           
         $this->view->render('create');
     }
 
     public function showAction():void
     {
         
-        //$data= $this->getRequestGet();
-        //$noteId=(int)$data['id'];
+      
         $note=$this->getNote();
         
         $this->view->render('show',['note'=>$note]);
@@ -123,13 +118,9 @@ class NoteController extends AbstractController
             $this-> redirect('/notesApp/', ['error'=> 'missingNoteId']);
          
         } 
-   
+        $note=$this->database->getNote($noteId);
 
-        try{
-            $note=$this->database->getNote($noteId);
-        }catch(NotFoundException $e){
-            $this-> redirect('/notesApp/', ['error'=> 'noteNotFound']); 
-        }
+        
         return $note;
     }
 }
