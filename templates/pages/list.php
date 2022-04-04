@@ -45,11 +45,14 @@
                   $currentPage=$page['number'] ??1;
                   $pages=$page['pages']??1;
 
-
+                  $phrase = $params['phrase'] ??null;
 
               ?>
               <div>
                 <form class="settings-form" action="/notesApp/" method="GET">
+                  <div>
+                    <label >Wyszukaj: <input type="text" name="phrase" value="<?php echo $phrase ?>"/></label>
+                  </div>
                   <div>Sortuj po:
                     <label>Tytule: <input name="sortby" type="radio" value="title" <?php echo $by==='title'?'checked' :''  ?>/></label>
                     <label>Dacie: <input name="sortby" type="radio" value="created" <?php echo $by==='created'?'checked' :''  ?>/></label>
@@ -113,7 +116,7 @@
                       </table>
               </div>
               <?php 
-              $paginationUrl="&pagesize=$size?&sortby=$by&sortorder=$order"
+              $paginationUrl="&phrase=$phrase&pagesize=$size?&sortby=$by&sortorder=$order"
               ?>
               <div class="pagination">
                 <?php if($currentPage!==1):?>

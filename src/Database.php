@@ -107,8 +107,61 @@ class Database
       
     }
 
+    public function searchNotes(string $phrase, int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
+    {
+        try{
 
 
+            $limit=$pageSize;
+            $offset=($pageNumber-1)* $pageSize;
+
+            if(!in_array($sortBy, ['created', 'title'])){
+                $sortBy = 'title';
+            }
+            if(!in_array($sortOrder, ['asc', 'desc'])){
+                $sortBy = 'desc';
+            }      
+            $phrase=$this->conect->quote('%'.$phrase.'%', PDO::PARAM_STR);      
+            $query= "SELECT id, title, created 
+            FROM notes
+            WHERE title LIKE($phrase)
+            ORDER BY $sortBy $sortOrder
+            LIMIT $offset, $limit
+            ";
+            
+            $result=$this->conect->query($query);
+            return $result-> fetchAll(PDO::FETCH_ASSOC);
+            //foreach($result as $row){
+            //  $notes[]=$row;  
+            //}
+            //dump($notes);
+             
+        }catch(Throwable $e){
+            throw new StorageException("nie udało sie wyszukać", 400, $e);
+        }
+    }
+    public function getSearchCount(string $phrase): int
+    {
+        try{
+            $phrase=$this->conect->quote('%'.$phrase.'%', PDO::PARAM_STR); 
+            $query= "SELECT count(*) AS il FROM notes WHERE title LIKE($phrase)";
+            
+            $result=$this->conect->query($query);
+            $result= $result-> fetch(PDO::FETCH_ASSOC);
+            if(!$result){
+                throw new StorageException("Błąd pobierania ilości notatek", 400);
+            }
+            return (int) $result['il'];
+            
+            //foreach($result as $row){
+            //  $notes[]=$row;  
+            //}
+            //dump($notes);
+             
+        }catch(Throwable $e){
+            throw new StorageException("nie udało się pobrać iformacji o liczbie o notatkach", 400, $e);
+        }
+    }
 
     public function createNote(array $data):void
     {
