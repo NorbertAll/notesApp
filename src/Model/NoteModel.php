@@ -2,32 +2,19 @@
 declare(strict_types=1);
 
 
-namespace App;
+namespace App\Model;
 
 use App\Exception\ConfigurationException;
 use App\Exception\StorageException;
 use App\Exception\NotFoundException;
 use PDO;
 use Throwable;
-
-class Database
+use PDOException;
+class NoteModel extends AbstractModel implements ModelInterface
 {
 
-    private PDO $conect;
 
-    public function __construct(array $config)
-    {
-        try{
-        
-            $this->validateConfig($config);
-            $this->createConnection($config);
-         
-            }catch(\PDOException $e){
-                throw new StorageException('Connection error');
-                exit('e');
-            }
-    }
-    public function getNote(int $id):array
+    public function get(int $id):array
     {
         try{
             
@@ -48,7 +35,7 @@ class Database
 
       
     }
-    public function getCount():int
+    public function count():int
     {
         try{
 
@@ -74,73 +61,17 @@ class Database
       
     }
 
-    public function getNotes(int $pageNumber, int $pageSize, string $sortBy, string $sortOrder):array
+    public function list(int $pageNumber, int $pageSize, string $sortBy, string $sortOrder):array
     {
-        try{
-
-
-            $limit=$pageSize;
-            $offset=($pageNumber-1)* $pageSize;
-
-            if(!in_array($sortBy, ['created', 'title'])){
-                $sortBy = 'title';
-            }
-            if(!in_array($sortOrder, ['asc', 'desc'])){
-                $sortBy = 'desc';
-            }            
-            $query= "SELECT id, title, created 
-            FROM notes
-            ORDER BY $sortBy $sortOrder
-            LIMIT $offset, $limit
-            ";
-            
-            $result=$this->conect->query($query);
-            return $result-> fetchAll(PDO::FETCH_ASSOC);
-            //foreach($result as $row){
-            //  $notes[]=$row;  
-            //}
-            //dump($notes);
-             
-        }catch(Throwable $e){
-            throw new StorageException("nie udało sie dostać do danych o notatkach", 400, $e);
-        }
+        return $this->findBy(null, $pageNumber, $pageSize, $sortBy, $sortOrder);
       
     }
 
-    public function searchNotes(string $phrase, int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
+    public function search(string $phrase, int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
     {
-        try{
-
-
-            $limit=$pageSize;
-            $offset=($pageNumber-1)* $pageSize;
-
-            if(!in_array($sortBy, ['created', 'title'])){
-                $sortBy = 'title';
-            }
-            if(!in_array($sortOrder, ['asc', 'desc'])){
-                $sortBy = 'desc';
-            }      
-            $phrase=$this->conect->quote('%'.$phrase.'%', PDO::PARAM_STR);      
-            $query= "SELECT id, title, created 
-            FROM notes
-            WHERE title LIKE($phrase)
-            ORDER BY $sortBy $sortOrder
-            LIMIT $offset, $limit
-            ";
-            
-            $result=$this->conect->query($query);
-            return $result-> fetchAll(PDO::FETCH_ASSOC);
-            //foreach($result as $row){
-            //  $notes[]=$row;  
-            //}
-            //dump($notes);
-             
-        }catch(Throwable $e){
-            throw new StorageException("nie udało sie wyszukać", 400, $e);
-        }
+        return $this->findBy($phrase, $pageNumber, $pageSize, $sortBy, $sortOrder);
     }
-    public function getSearchCount(string $phrase): int
+    public function SearchCount(string $phrase): int
     {
         try{
             $phrase=$this->conect->quote('%'.$phrase.'%', PDO::PARAM_STR); 
@@ -163,7 +94,7 @@ class Database
         }
     }
 
-    public function createNote(array $data):void
+    public function create(array $data):void
     {
         try{
             
@@ -180,7 +111,7 @@ class Database
     }
 
 
-    public function editNote(int $id, array $data):void
+    public function edit(int $id, array $data):void
     {
         try{
             
@@ -195,7 +126,7 @@ class Database
         }
     }
 
-    public function deleteNote(int $id):void
+    public function delete(int $id):void
     {
         try{
             $query="DELETE FROM notes WHERE id=$id LIMIT 1";
@@ -204,29 +135,44 @@ class Database
             throw new StorageException("Nie udało sięusunąc notatki", 400, $e);
         }
     }
-
-    private function createConnection(array $config):void
+    private function findBy(?string $phrase, int $pageNumber, int $pageSize, string $sortBy, string $sortOrder): array
     {
-        $dsn = "mysql:dbname={$config['database']};host={$config['host']}";
-            $this->conect=new PDO(
-                $dsn,
-                $config['user'],
-                $config['password'],
-                [
-                    PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION
-                ]
-            );
-    }
+        try{
 
-    private function validateConfig(array $config):void
-    {
-        if(
-            empty($config['database'])||
-            empty($config['host'])||
-            empty($config['user'])||
-            empty($config['password'])
-        ){
-            throw new ConfigurationException("Storage configuration error");
+
+            $limit=$pageSize;
+            $offset=($pageNumber-1)* $pageSize;
+
+            if(!in_array($sortBy, ['created', 'title'])){
+                $sortBy = 'title';
+            }
+            if(!in_array($sortOrder, ['asc', 'desc'])){
+                $sortBy = 'desc';
+            }      
+            $wherePart ='';
+            if($phrase){
+               $phrase=$this->conect->quote('%'.$phrase.'%', PDO::PARAM_STR);
+               $wherePart ="WHERE title LIKE($phrase)";
+            }
+            
+            
+          
+            $query= "SELECT id, title, created 
+            FROM notes
+            $wherePart
+            ORDER BY $sortBy $sortOrder
+            LIMIT $offset, $limit
+            ";
+            
+            $result=$this->conect->query($query);
+            return $result-> fetchAll(PDO::FETCH_ASSOC);
+            //foreach($result as $row){
+            //  $notes[]=$row;  
+            //}
+            //dump($notes);
+             
+        }catch(Throwable $e){
+            throw new StorageException("nie udało sie wyszukać", 400, $e);
         }
     }
 }

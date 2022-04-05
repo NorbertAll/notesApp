@@ -3,20 +3,21 @@
 
     namespace App\Controller;
 
-    use App\Database;
+    
     use App\View;
     use App\Request;
     use App\Exception\AppException;
     use App\Exception\ConfigurationException;
 use App\Exception\NotFoundException;
 use App\Exception\StorageException;
+use App\Model\NoteModel;
 
     abstract class AbstractController 
     {
     
     protected const DEFAULT_ACTION='list';
     private static array $configuration=[];
-    protected Database $database;
+    protected NoteModel $noteModel;
     protected Request $request;
     protected View $view;
 
@@ -31,7 +32,7 @@ use App\Exception\StorageException;
         if(empty(self::$configuration['db'])){
             throw new ConfigurationException('Configuration error');
         }
-        $this->database = new Database(self::$configuration['db']);
+        $this->noteModel = new NoteModel(self::$configuration['db']);
         $this->request=$request;
         $this->view=new View();
         
