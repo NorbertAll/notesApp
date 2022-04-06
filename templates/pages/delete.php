@@ -13,11 +13,12 @@
             
             <input name="id" type="hidden" value="<?php echo $note['id']?>" />
             <input type="submit" class="btn btn-danger" value="Usuń">
+            <a href="./"><button class="btn btn-primary">Powrót do listy Notatek</button>  </a>
         </form>
    <?php else:?>
     <div>
         Brak notatki do wyświetlenia
     </div>
    <?php endif;?>
-   <a href="./"><button class="btn btn-primary">Powrót do listy Notatek</button>  </a>
+   
 </div>

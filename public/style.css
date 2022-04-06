@@ -1,22 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=latin-ext');
-
-
-body{
-  font-family: 'Montserrat', sans-serif;
-  color: #333;
-  background-color: rgb(163, 226, 235);
-}
-
-div.main
+body
 {
-
-  border-style: dotted; 
-    border-width: 2px; 
-    border-color:#ccc;
-    border:1px solid gray;
+    background-color: rgb(188, 230, 238);
 }
-ul,li{
+ul, li 
+{
+    padding-left: 0;
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    
 }
