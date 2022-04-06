@@ -8,14 +8,14 @@
        <li>Data Stworzenia:<?php echo $note['created'] ?></li>
    </ul> 
         <a href="/notesApp/?action=edit&id=<?php echo $note['id']?>">
-            <button>Edytuj</button>
+            <button  class="btn btn-primary">Edytuj</button>
         </a>
    <?php else:?>
     <div>
         Brak notatki do wyświetlenia
     </div>
    <?php endif;?>
-   <a href="./"><button>Powrót do listy Notatek</button>  </a>
+   <a href="./"><button  class="btn btn-primary">Powrót do listy Notatek</button>  </a>
 </div>
 
 

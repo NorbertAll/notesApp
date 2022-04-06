@@ -48,7 +48,7 @@
                   $phrase = $params['phrase'] ??null;
 
               ?>
-              <div>
+              <div class="form-group text-center">
                 <form class="settings-form" action="/notesApp/" method="GET">
                   <div>
                     <label >Wyszukaj: <input type="text" name="phrase" value="<?php echo $phrase ?>"/></label>
@@ -69,7 +69,7 @@
                     <label for="">10 <input name="pagesize" type="radio" value="10"<?php echo $size===10 ? 'checked':'' ?> >      </label>
                     <label for="">25 <input name="pagesize" type="radio" value="25"<?php echo $size===25 ? 'checked':'' ?> >      </label>
                   </div>
-                  <input type="submit" value="Wyślij">
+                  <input type="submit" class="btn btn-primary" value="Wyślij">
                 </form>
               </div>
 
@@ -97,13 +97,13 @@
                                 <td><?php echo $note['created'] ?></td>
                                 <td>
                                   <a href="./?action=show&id=<?php echo $note['id'] ?>">
-                                    <button>
+                                    <button class="btn btn-primary">
                                       Szczegóły
                                     </button>
                                   </a>
 
                                   <a href="./?action=delete&id=<?php echo $note['id'] ?>">
-                                    <button>
+                                    <button class="btn btn-danger">
                                       Usuń
                                     </button>
                                   </a>
@@ -115,27 +115,30 @@
                              
                       </table>
               </div>
+
+              <div class="align-middle">
               <?php 
               $paginationUrl="&phrase=$phrase&pagesize=$size?&sortby=$by&sortorder=$order"
               ?>
-              <div class="pagination">
+              
                 <?php if($currentPage!==1):?>
                 <a href="/notesApp/?page=<?php echo $currentPage -1 . $paginationUrl ?>">
-                        <button>Prev</button>
+                        <button class="btn btn-primary">Prev</button>
                 </a>
                 <?php endif;?>
                 <?php for($i=1; $i<=$pages; $i++): ?>
                   
                     <a href="/notesApp/?page=<?php echo $i. $paginationUrl ?>">
-                      <button><?php echo $i; ?></button>
+                      <button class="btn btn-primary"><?php echo $i; ?></button>
                     </a>
                     &nbsp
                 <?php endfor; ?>
                 <?php if($currentPage<$pages):?>
                 <a href="/notesApp/?page=<?php echo $currentPage +1 . $paginationUrl ?>">
-                      <button>Next</button>
+                      <button class="btn btn-primary">Next</button>
                 </a>
                 <?php endif;?>
+              
               </div>
        </section>
 </div>

@@ -9,14 +9,15 @@
    </ul> 
        
 
-        <form method="POST" action="/notesApp/?action=delete">
+        <form method="POST" action="/notesApp/?action=delete" >
+            
             <input name="id" type="hidden" value="<?php echo $note['id']?>" />
-            <input type="submit" value="Usuń">
+            <input type="submit" class="btn btn-danger" value="Usuń">
         </form>
    <?php else:?>
     <div>
         Brak notatki do wyświetlenia
     </div>
    <?php endif;?>
-   <a href="./"><button>Powrót do listy Notatek</button>  </a>
+   <a href="./"><button class="btn btn-primary">Powrót do listy Notatek</button>  </a>
 </div>
